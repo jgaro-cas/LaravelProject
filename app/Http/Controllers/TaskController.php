@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -13,7 +14,8 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return view('task');
+        $tasks = Task::all();
+        return view('task.index')->with('tasks', $tasks);
     }
 
     /**
@@ -23,7 +25,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        //
+        return view('task.create');
     }
 
     /**
@@ -34,7 +36,8 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $task = Task::create($request->all());
+        return view('task.show')->with('task', $task);
     }
 
     /**
@@ -45,7 +48,8 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        //
+        $task = Task::find($id);
+        return view('task.show')->with('task', $task);
     }
 
     /**
@@ -79,6 +83,8 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $task = Task::find($id);
+        $task->delete();
+        return redirect(route('tasks.index'));
     }
 }
